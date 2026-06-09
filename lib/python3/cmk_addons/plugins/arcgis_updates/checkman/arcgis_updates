@@ -1,0 +1,37 @@
+title: ArcGIS Enterprise patch status
+agents: windows
+catalog: app
+license: GPLv2
+distribution: community
+description:
+ Monitors ArcGIS Enterprise components for available patches by comparing
+ installed patch QFE_IDs from the Windows registry against Esri's patch
+ notification feed at content.esri.com.
+
+ Discovers all patchable Esri components under HKLM\SOFTWARE\ESRI by
+ checking for the QFEPatchFinder or QFEARP markers that Esri places on
+ patchable product keys. One service is created per discovered component.
+
+ Components confirmed from real registry exports and marked VERIFIED in
+ the plugin source: ArcGIS Server, Portal for ArcGIS, ArcGIS Data Store.
+ Other components including GeoEvent Server, Web Adaptor, Notebook Server,
+ Mission Server, and Video Server use unverified key patterns and QFE prefix
+ assumptions. Community contributions are welcome to verify these.
+
+ The patch feed JSON is cached locally on the monitored host. If the live
+ feed is unreachable the cached copy is used and noted in the service
+ output. If both the live fetch and cache fail the service goes WARN.
+
+ Security patches (Critical field set to "security" in the Esri feed) cause
+ CRIT regardless of threshold configuration. Non-security patches emit WARN
+ by default. Patches available for longer than the configured overdue
+ threshold emit CRIT regardless of security status. Both thresholds are
+ configurable per host and per component via the service monitoring rule.
+
+item:
+ Component display name and installed version, for example
+ "ArcGIS Server 11.5" or "Portal for ArcGIS 11.5".
+
+inventory:
+ One service is created per patchable ArcGIS Enterprise component found
+ under HKLM\SOFTWARE\ESRI on the monitored Windows host.
