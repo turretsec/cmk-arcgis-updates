@@ -56,7 +56,7 @@ KNOWN_COMPONENTS = [
 
     # [VERIFIED] Portal for ArcGIS
     (re.compile(r'^Portal for ArcGIS$', re.I),
-     'Portal for ArcGIS', 'PFA', 'RealVersion'),
+     'ArcGIS Portal', 'PFA', 'RealVersion'),
 
     # [VERIFIED] ArcGIS Data Store
     (re.compile(r'^ArcGIS Data Store$', re.I),
@@ -90,7 +90,7 @@ KNOWN_COMPONENTS = [
 # Lookup from auto-detected QFE prefix to human-readable display name.
 QFE_PREFIX_DISPLAY = {
     'S':   'ArcGIS Server',
-    'PFA': 'Portal for ArcGIS',
+    'PFA': 'ArcGIS Portal',
     'DS':  'ArcGIS Data Store',
     'GES': 'ArcGIS GeoEvent Server',
     'WA':  'ArcGIS Web Adaptor',

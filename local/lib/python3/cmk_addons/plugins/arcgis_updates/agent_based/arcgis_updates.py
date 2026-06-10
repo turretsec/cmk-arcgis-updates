@@ -46,7 +46,7 @@ def discover_arcgis_updates(section: Section) -> DiscoveryResult:
     if section is None:
         return
     for comp in section.get('components', []):
-        yield Service(item=f"{comp['display']} {comp['version']}")
+        yield Service(item=comp['display'])
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -97,7 +97,7 @@ def check_arcgis_updates(item: str, params: dict, section: Section) -> CheckResu
 
     comp = None
     for c in section.get('components', []):
-        if f"{c['display']} {c['version']}" == item:
+        if c['display'] == item:
             comp = c
             break
 
@@ -109,6 +109,7 @@ def check_arcgis_updates(item: str, params: dict, section: Section) -> CheckResu
     feed_stale = section.get('feed_stale', False)
     available  = comp.get('available', {})
     applied    = set(comp.get('applied', []))
+    ver        = f"v{comp['version']} - "
 
     # Feed stale - note it but continue evaluation with cached data
     if feed_stale and feed_error:
@@ -122,7 +123,7 @@ def check_arcgis_updates(item: str, params: dict, section: Section) -> CheckResu
 
     # Version not yet in the feed
     if not available:
-        yield Result(state=State.OK, summary='No patches in feed for this version')
+        yield Result(state=State.OK, summary=f'{ver}No patches in feed')
         yield Metric('missing_patches', 0)
         return
 
@@ -131,7 +132,7 @@ def check_arcgis_updates(item: str, params: dict, section: Section) -> CheckResu
     if not missing:
         yield Result(
             state   = State.OK,
-            summary = f'Up to date ({len(applied)}/{len(available)})',
+            summary = f'{ver}Up to date ({len(applied)}/{len(available)})',
         )
         yield Metric('missing_patches', 0)
         return
@@ -151,9 +152,9 @@ def check_arcgis_updates(item: str, params: dict, section: Section) -> CheckResu
 
     if security_missing:
         if n_other > 0:
-            summary = f'{n_sec} security + {n_other} other {_patch_word(n_other)} missing'
+            summary = f'{ver}{n_sec} security + {n_other} other {_patch_word(n_other)} missing'
         else:
-            summary = f'{n_sec} security {_patch_word(n_sec)} missing'
+            summary = f'{ver}{n_sec} security {_patch_word(n_sec)} missing'
         yield Result(state=State.CRIT, summary=summary, details=details)
         return
 
@@ -161,12 +162,12 @@ def check_arcgis_updates(item: str, params: dict, section: Section) -> CheckResu
     if oldest_age is not None and oldest_age >= crit_age_days:
         yield Result(
             state   = State.CRIT,
-            summary = f'{n_missing} {_patch_word(n_missing)} missing, oldest {oldest_age}d',
+            summary = f'{ver}{n_missing} {_patch_word(n_missing)} missing, oldest {oldest_age}d',
             details = details,
         )
         return
 
-    summary = f'{n_missing} {_patch_word(n_missing)} available'
+    summary = f'{ver}{n_missing} {_patch_word(n_missing)} available'
 
     if params.get('warn_on_available', True):
         yield Result(state=State.WARN, summary=summary, details=details)
