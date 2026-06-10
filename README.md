@@ -21,6 +21,14 @@ An addition to the [cmk-arcgis](https://github.com/turretsec/cmk-arcgis) special
 - Configurable feed URL for internal mirrors or air-gapped environments
 - Deployed and configured via the Checkmk Agent Bakery
 
+## Screenshots
+
+### Example Services List
+![ArcGIS Example Dashboard](docs/images/example_crit_services.png)
+
+### Example Service
+![ArcGIS portal services](docs/images/example_service_details.png)
+
 ## How it works
 
 The agent plugin runs on each Windows host where ArcGIS Enterprise components are installed. It enumerates `HKLM\SOFTWARE\ESRI`, discovers patchable components by checking for Esri's `QFEPatchFinder` and `QFEARP` registry markers, and compares each component's installed patch QFE_IDs against Esri's patch notification feed.
