@@ -1,7 +1,6 @@
 services:
   checkmk-dev:
     image: checkmk/check-mk-pro:${CMK_VERSION}
-    container_name: checkmk-dev
     hostname: checkmk-dev
     ports:
       - "8080:5000"
@@ -10,10 +9,17 @@ services:
       - TZ=${TZ}
     volumes:
       - checkmk-sites:/omd/sites
-      - ./local:/omd/sites/cmk/local
     tmpfs:
       - /opt/omd/sites/cmk/tmp:uid=1000,gid=1000
     restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./local
+          target: /omd/sites/cmk/local
+          ignore:
+            - "**/__pycache__"
+            - "**/*.pyc"
 
 volumes:
   checkmk-sites:
