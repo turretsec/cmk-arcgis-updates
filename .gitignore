@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local editor/project files
+.vscode/
+.idea/
+
+# Build/package outputs
+*.mkp
+*.zip
+*.patch
+build/
+dist/
+*.egg-info/
+
+# Local scripts and scratch files
+scripts/
+tempCodeRunnerFile.py
+
+# Windows alternate data stream markers
+*:Zone.Identifier
+
+# Secrets
+*.env
+.env
